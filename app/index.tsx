@@ -2,9 +2,10 @@ import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components/native';
 import { Loading } from './components/Loading';
+import { SignIn } from './screens/SignIn';
 import theme from './theme';
 
 export default function App() {
@@ -29,12 +30,10 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <StatusBar
             barStyle="light-content"
-            backgroundColor="transparent"
+            backgroundColor={theme.COLORS.GRAY_800}
             translucent
           />
-          <View>
-            <Text>Open up index.tsx to start working on your app!</Text>
-          </View>
+          <SignIn />
         </ThemeProvider>
       ) : (
         <Loading />

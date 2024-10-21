@@ -49,7 +49,7 @@ export default [
                 ...globals.jest,
             },
             parser: tsParser,
-            ecmaVersion: 5,
+            ecmaVersion: 2020,
             sourceType: 'module',
             parserOptions:{
                 project: 'tsconfig.json',
@@ -68,6 +68,7 @@ export default [
             '@typescript-eslint/explicit-function-return-type':'off',
             '@typescript-eslint/no-empty-functions':'off',
             '@typescript-eslint/explicit-module-boundary-types':'off',
+            "@typescript-eslint/no-empty-object-type": "off",
             'unused-imports/no-unused-imports':'error',
             'unused-imports/no-unused-vars': [
                 'warn',
@@ -87,6 +88,7 @@ export default [
                 'jsxBracketSameLine': false,
                 'semi': true,
                 'printWidth': 80,
+                'endOfLine': 'lf',
             }],
             'react/jsx-indent': ['error', 2],
             'react/jsx-indent-props': ['error', 2],
