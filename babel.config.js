@@ -18,10 +18,11 @@ module.exports = function (api) {
             '@hooks': './src/hooks',
             '@contexts': './src/contexts',
             '@routes': './src/routes',
-            '@notifications': './src/notifications'
-          }
-        }
-      ]
-    ]
+            '@notifications': './src/notifications',
+            '@theme': './src/theme/index.ts',
+          },
+        },
+      ],
+    ],
   };
 };

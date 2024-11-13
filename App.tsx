@@ -1,18 +1,16 @@
-import NativeBaseIcon from '@components/NativeBaseIcon';
 import {
-  Box,
-  Center,
-  extendTheme,
-  Heading,
-  HStack,
-  Link,
-  NativeBaseProvider,
-  Switch,
-  Text,
-  useColorMode,
-  VStack,
-} from 'native-base';
-import React from 'react';
+  Roboto_400Regular,
+  Roboto_700Bold,
+  useFonts,
+} from '@expo-google-fonts/roboto';
+import { NativeBaseProvider } from 'native-base';
+
+import { Loading } from '@components/Loading';
+import { SignIn } from '@screens/SignIn';
+import { THEME } from '@theme';
+import { HStack, Switch, Text, useColorMode } from 'native-base';
+import React, { useEffect } from 'react';
+import { LogBox, StatusBar } from 'react-native';
 
 // Define the config
 const config = {
@@ -20,50 +18,23 @@ const config = {
   initialColorMode: 'dark',
 };
 
-// extend the theme
-export const theme = extendTheme({ config });
-type MyThemeType = typeof theme;
-declare module 'native-base' {
-  interface ICustomTheme extends MyThemeType {}
-}
 export default function App() {
+  const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
+  useEffect(() => {
+    LogBox.ignoreLogs([
+      'In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.',
+    ]);
+  }, []);
+
   return (
-    <NativeBaseProvider>
-      <Center
-        _dark={{ bg: 'blueGray.900' }}
-        _light={{ bg: 'blueGray.50' }}
-        px={4}
-        flex={1}
-      >
-        <VStack space={5} alignItems="center">
-          <NativeBaseIcon />
-          <Heading size="lg">Welcome to NativeBase</Heading>
-          <HStack space={2} alignItems="center">
-            <Text>Edit</Text>
-            <Box
-              _web={{
-                _text: {
-                  fontFamily: 'monospace',
-                  fontSize: 'sm',
-                },
-              }}
-              px={2}
-              py={1}
-              _dark={{ bg: 'blueGray.800' }}
-              _light={{ bg: 'blueGray.200' }}
-            >
-              App.js
-            </Box>
-            <Text>and save to reload.</Text>
-          </HStack>
-          <Link href="https://docs.nativebase.io" isExternal>
-            <Text color="primary.500" underline fontSize={'xl'}>
-              Learn NativeBase
-            </Text>
-          </Link>
-          <ToggleDarkMode />
-        </VStack>
-      </Center>
+    <NativeBaseProvider theme={THEME}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+        // hidden={statusBarShown}
+      />
+      {fontsLoaded ? <SignIn /> : <Loading />}
     </NativeBaseProvider>
   );
 }
