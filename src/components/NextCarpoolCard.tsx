@@ -1,4 +1,4 @@
-import { NextCarpoolDTO } from '@dtos/NextCarpoolDTO';
+import { NextCarpoolDTO } from '@dtos';
 import { Entypo } from '@expo/vector-icons';
 import { HStack, Heading, Icon, Text, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
@@ -33,9 +33,10 @@ export function NextCarpoolCard({ data, ...rest }: Props) {
         pr={4}
         rounded="md"
         mb={3}
+        paddingLeft={4}
       >
         <VStack flex={1}>
-          <Heading fontSize="lg" color="white" fontFamily="heading">
+          <Heading fontSize="md" color="white" fontFamily="heading">
             {data.licensePlate}
           </Heading>
           <Text fontSize="sm" color="gray.200" mt={1} numberOfLines={2}>

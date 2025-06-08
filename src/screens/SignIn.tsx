@@ -1,12 +1,12 @@
-import { Center, Heading, ScrollView, Text, VStack, View } from 'native-base';
-import { useState } from 'react';
-
 import { Button } from '@components/Button';
+import { ErrorScreen } from '@components/ErrorScreen';
+import { Loading } from '@components/Loading';
+import { useAsyncMock } from '@hooks/useAsyncMock';
+import { signInMock } from '@mocks/api.mock';
+import { Center, Heading, ScrollView, Text, VStack } from 'native-base';
 
 export function SignIn() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  async function handleSignIn() {}
+  const { execute: handleSignIn, isLoading, error } = useAsyncMock(signInMock);
 
   return (
     <ScrollView
@@ -14,24 +14,35 @@ export function SignIn() {
       showsVerticalScrollIndicator={false}
     >
       <VStack flex={1} px={10} pb={16} backgroundColor="gray.800">
-        <View flex={1} />
-        <Center paddingBottom={6}>
-          <View marginBottom={8}>
-            <Heading
-              color="green.500"
-              fontSize="3xl"
-              mb={8}
-              fontFamily="heading"
-              marginBottom={-1}
-            >
-              Fatec Caronas
-            </Heading>
-            <Text color="gray.100" fontSize="md" textAlign="center">
-              Carona para Alunos
-            </Text>
-          </View>
-          <Button title="Login Institucional" onPress={handleSignIn} />
-        </Center>
+        {isLoading ? (
+          <Loading />
+        ) : error ? (
+          <ErrorScreen message={error} onRetry={handleSignIn} />
+        ) : (
+          <>
+            <VStack flex={1} justifyContent="center">
+              <Center paddingBottom={6}>
+                <VStack marginBottom={8} space={1}>
+                  <Heading
+                    color="green.500"
+                    fontSize="3xl"
+                    fontFamily="heading"
+                  >
+                    Fatec Caronas
+                  </Heading>
+                  <Text color="gray.100" fontSize="md" textAlign="center">
+                    Carona para Alunos
+                  </Text>
+                </VStack>
+                <Button
+                  title="Login Institucional"
+                  onPress={handleSignIn}
+                  isLoading={isLoading}
+                />
+              </Center>
+            </VStack>
+          </>
+        )}
       </VStack>
     </ScrollView>
   );

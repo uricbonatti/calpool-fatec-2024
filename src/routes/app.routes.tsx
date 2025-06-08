@@ -1,121 +1,142 @@
+// src/routes/app.routes.tsx
 import {
   BottomTabNavigationProp,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'native-base';
 import { Platform } from 'react-native';
 
-import HistorySvg from '@assets/history.svg';
+import { default as HistorySvg } from '@assets/history.svg';
 import HomeSvg from '@assets/home.svg';
 import ProfileSvg from '@assets/profile.svg';
 import SearchSvg from '@assets/search.svg';
+
 import { Details } from '@screens/Details';
+import { EditVehicle } from '@screens/EditVehicle';
 import { History } from '@screens/History';
 import { Home } from '@screens/Home';
 import { Offer } from '@screens/Offer';
 import { Profile } from '@screens/Profile';
+import { RideRequests } from '@screens/RideRequests';
 import { Search } from '@screens/Search';
 
 type AppRoutesType = {
-  offer: undefined;
-  details: { carpoolId: string };
   home: undefined;
+  details: {
+    carpoolId: string;
+    fromScreen?: 'search' | 'upcoming' | 'history';
+  };
+  offer: undefined;
   search: undefined;
   history: undefined;
   profile: undefined;
+  editVehicle: { vehicleId: string };
+  rideRequests: undefined;
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutesType>;
-const { Navigator: StackNavigator, Screen: StackScreen } =
-  createStackNavigator<AppRoutesType>();
-const { Navigator: TabNavigator, Screen: TabScreen } =
-  createBottomTabNavigator<AppRoutesType>();
+const Stack = createNativeStackNavigator<AppRoutesType>();
+const { Navigator, Screen } = createBottomTabNavigator<AppRoutesType>();
 
 export function AppRoutes() {
   const { sizes, colors } = useTheme();
-  const iconSize = sizes[8];
+  const iconSize = sizes[6];
 
-  function HideStack() {
+  function HomeStack() {
     return (
-      <StackNavigator initialRouteName="home">
-        <StackScreen
-          name="home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
-        <StackScreen
-          name="details"
-          component={Details}
-          options={{ headerShown: false }}
-        />
-        <StackScreen
-          name="offer"
-          component={Offer}
-          options={{ headerShown: false }}
-        />
-      </StackNavigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="home" component={Home} />
+        <Stack.Screen name="details" component={Details} />
+        <Stack.Screen name="offer" component={Offer} />
+        <Stack.Screen name="rideRequests" component={RideRequests} />
+      </Stack.Navigator>
+    );
+  }
+
+  function SearchStack() {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="search" component={Search} />
+        <Stack.Screen name="details" component={Details} />
+      </Stack.Navigator>
+    );
+  }
+
+  function HistoryStack() {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="history" component={History} />
+        <Stack.Screen name="details" component={Details} />
+      </Stack.Navigator>
+    );
+  }
+
+  function ProfileStack() {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="profile" component={Profile} />
+        <Stack.Screen name="editVehicle" component={EditVehicle} />
+      </Stack.Navigator>
     );
   }
 
   return (
-    <TabNavigator
+    <Navigator
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.green[500],
         tabBarInactiveTintColor: colors.gray[200],
-
         tabBarStyle: {
           backgroundColor: colors.gray[600],
           borderTopWidth: 0,
           height: Platform.OS === 'android' ? 'auto' : 96,
-          paddingBottom: sizes[20],
+          paddingBottom: sizes[16],
           paddingTop: sizes[6],
-          marginBottom: -sizes[6],
-          paddingHorizontal: sizes[6],
         },
       }}
     >
-      <TabScreen
+      <Screen
         name="home"
-        component={HideStack}
+        component={HomeStack}
         options={{
           tabBarIcon: ({ color }) => (
-            <HomeSvg fill={color} height={iconSize} width={iconSize} />
+            <HomeSvg fill={color} width={iconSize} height={iconSize} />
           ),
         }}
       />
-      <TabScreen
-        name="search"
-        component={Search}
-        options={{
-          tabBarLabel: 'Search',
 
+      <Screen
+        name="search"
+        component={SearchStack}
+        options={{
           tabBarIcon: ({ color }) => (
-            <SearchSvg fill={color} height={iconSize} width={iconSize} />
+            <SearchSvg fill={color} width={iconSize} height={iconSize} />
           ),
         }}
       />
-      <TabScreen
+
+      <Screen
         name="history"
-        component={History}
+        component={HistoryStack}
         options={{
           tabBarIcon: ({ color }) => (
-            <HistorySvg fill={color} height={iconSize} width={iconSize} />
+            <HistorySvg fill={color} width={iconSize} height={iconSize} />
           ),
         }}
       />
-      <TabScreen
+
+      <Screen
         name="profile"
-        component={Profile}
+        component={ProfileStack}
         options={{
           tabBarIcon: ({ color }) => (
-            <ProfileSvg fill={color} height={iconSize} width={iconSize} />
+            <ProfileSvg fill={color} width={iconSize} height={iconSize} />
           ),
         }}
       />
-    </TabNavigator>
+    </Navigator>
   );
 }
