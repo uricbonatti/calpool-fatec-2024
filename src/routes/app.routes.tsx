@@ -15,9 +15,12 @@ import SearchSvg from '@assets/search.svg';
 import { Details } from '@screens/Details';
 import { EditVehicle } from '@screens/EditVehicle';
 import { History } from '@screens/History';
+import { HistoryDetails } from '@screens/HistoryDetails';
 import { Home } from '@screens/Home';
+import { Notifications } from '@screens/Notifications';
 import { Offer } from '@screens/Offer';
 import { Profile } from '@screens/Profile';
+import { RideChat } from '@screens/RideChat';
 import { RideRequests } from '@screens/RideRequests';
 import { Search } from '@screens/Search';
 
@@ -25,14 +28,17 @@ type AppRoutesType = {
   home: undefined;
   details: {
     carpoolId: string;
-    fromScreen?: 'search' | 'upcoming' | 'history';
+    fromScreen?: 'search' | 'upcoming';
   };
+  historyDetails: { carpoolId: string };
   offer: undefined;
   search: undefined;
   history: undefined;
   profile: undefined;
   editVehicle: { vehicleId: string };
   rideRequests: undefined;
+  notifications: undefined;
+  rideChat: { rideId: string };
 };
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutesType>;
@@ -50,6 +56,8 @@ export function AppRoutes() {
         <Stack.Screen name="details" component={Details} />
         <Stack.Screen name="offer" component={Offer} />
         <Stack.Screen name="rideRequests" component={RideRequests} />
+        <Stack.Screen name="notifications" component={Notifications} />
+        <Stack.Screen name="rideChat" component={RideChat} />
       </Stack.Navigator>
     );
   }
@@ -67,7 +75,7 @@ export function AppRoutes() {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="history" component={History} />
-        <Stack.Screen name="details" component={Details} />
+        <Stack.Screen name="historyDetails" component={HistoryDetails} />
       </Stack.Navigator>
     );
   }

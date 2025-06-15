@@ -1,6 +1,7 @@
 // src/contexts/AuthContext.tsx
 import { UserDTO } from '@dtos';
-import { signInMock } from '@mocks';
+import { signInMock } from '@mocks/api.mock';
+import { mockUser } from '@mocks/user.mock';
 import api from '@services/api';
 import {
   storageAuthTokenGet,
@@ -15,7 +16,7 @@ import {
 import { ReactNode, createContext, useEffect, useState } from 'react';
 
 export type AuthContextDataProps = {
-  user: UserDTO;
+  user: UserDTO | null;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
   updateUserProfile: (userUpdated: UserDTO) => Promise<void>;
@@ -32,7 +33,7 @@ export const AuthContext = createContext<AuthContextDataProps>(
 );
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const [userState, setUserState] = useState<UserDTO>({} as UserDTO);
+  const [userState, setUserState] = useState<UserDTO>(mockUser);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] =
     useState(true);
   const [refreshedToken, setRefreshedToken] = useState('');
@@ -100,7 +101,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const userLogged = await storageUserGet();
       const { token } = await storageAuthTokenGet();
 
-      if (userLogged && token) {
+      if (userLogged?.id && token) {
         userAndTokenUpdate(userLogged, token);
       }
     } catch (error) {

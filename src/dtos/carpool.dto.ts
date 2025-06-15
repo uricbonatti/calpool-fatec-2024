@@ -1,30 +1,51 @@
+import { RideType } from 'src/enums/ride-type';
+import { RideStatus } from './ride-history.dto';
 import { UserDTO } from './user.dto';
 
 // userDTO.ts
 export type BasicUserInfo = Pick<UserDTO, 'id' | 'name' | 'avatar'>;
+type Coordinates = {
+  latitude: number;
+  longitude: number;
+};
 
-// carpoolDTO.ts
-export type CarpoolStatus =
-  | 'pending'
-  | 'completed'
-  | 'canceled'
-  | 'in_progress';
+type UserOnCarpool = {
+  id: string;
+  name: string;
+  avatar: string;
+  isDriver: boolean;
+  isParticipant: boolean;
+};
+type Driver = {
+  id: string;
+  name: string;
+  avatar: string;
+  pixKey?: string;
+};
+type Vehicle = {
+  id: string;
+  licensePlate: string;
+  availableSeats: number;
+  model?: string;
+};
+type Ride = {
+  rideType: RideType;
+  status: RideStatus;
+  departureTime: string;
+  arrivalTime?: string;
+  day: string;
+  origin: string;
+  destination: string;
+  routeCoordinates: Coordinates[];
+};
 
 export type CarpoolDetailsDTO = {
   id: string;
-  driver: BasicUserInfo;
+  driver: Driver;
+  user: UserOnCarpool;
+  vehicle: Vehicle;
   participants: BasicUserInfo[];
-  rideType: 'ida' | 'volta';
-  status: CarpoolStatus;
-  licensePlate: string;
-  availableSeats: number;
-  departureTime: string;
-  arrivalTime?: string;
-  origin: string;
-  destination: string;
-  routeCoordinates: Array<{ latitude: number; longitude: number }>;
-  isDriver: boolean;
-  isParticipant: boolean;
+  ride: Ride;
 };
 
 export type NextCarpoolDTO = {

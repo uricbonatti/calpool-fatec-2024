@@ -2,16 +2,29 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
-import { Button, Center, Heading, Icon, IHeadingProps } from 'native-base';
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  HStack,
+  Icon,
+  IconButton,
+  IHeadingProps,
+} from 'native-base';
 
 type Props = IHeadingProps & {
   title: string;
   showBackButton?: boolean;
+  rightIcon?: React.ReactNode;
+  rightIconColor?: string;
 };
 
 export function ScreenHeader({
   title,
   showBackButton = false,
+  rightIcon,
+  rightIconColor,
   ...rest
 }: Props) {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -36,17 +49,28 @@ export function ScreenHeader({
         </Button>
       )}
 
-      <Heading
-        color="gray.100"
-        fontSize="xl"
-        fontFamily="heading"
-        flex={showBackButton ? 1 : 0}
-        textAlign="center"
-        ml={showBackButton ? -6 : 0}
-        {...rest}
-      >
-        {title}
-      </Heading>
+      <HStack flex={1} justifyContent="center" alignItems="center">
+        <Heading
+          color="gray.100"
+          fontSize="xl"
+          fontFamily="heading"
+          textAlign="center"
+          {...rest}
+        >
+          {title}
+        </Heading>
+      </HStack>
+
+      {rightIcon && (
+        <Box ml="auto">
+          <IconButton
+            icon={rightIcon as any}
+            color={rightIconColor}
+            variant="ghost"
+            disabled
+          />
+        </Box>
+      )}
     </Center>
   );
 }

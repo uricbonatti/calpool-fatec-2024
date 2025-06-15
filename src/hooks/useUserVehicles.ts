@@ -1,5 +1,5 @@
 // src/hooks/useUserVehicles.ts
-import { fetchUserVehiclesMock } from '@mocks';
+import { userVehicles } from '@mocks/user.mock';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 
@@ -9,7 +9,7 @@ export function useUserVehicles(userId: string) {
   useFocusEffect(
     useCallback(() => {
       const checkVehicles = async () => {
-        const vehicles = await fetchUserVehiclesMock(userId);
+        const vehicles = userVehicles;
         setHasVehicles(vehicles.length > 0);
       };
       checkVehicles();

@@ -9,7 +9,7 @@ import { NextCarpoolDTO } from '@dtos';
 import { useAsyncMock } from '@hooks/useAsyncMock';
 import { useAuth } from '@hooks/useAuth';
 import { useUserVehicles } from '@hooks/useUserVehicles';
-import { fetchNextCarpoolsMock } from '@mocks';
+import { mockNextCarpools } from '@mocks/carpool.mock';
 import { useNavigation } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import {
@@ -34,20 +34,23 @@ export function Home() {
     isLoading,
     error,
     execute: reloadCarpools,
-  } = useAsyncMock<NextCarpoolDTO[]>(fetchNextCarpoolsMock);
+  } = useAsyncMock<NextCarpoolDTO[]>(() => Promise.resolve(mockNextCarpools));
   const { user } = useAuth();
-  const hasVehicles = useUserVehicles(user.id);
+  const hasVehicles = useUserVehicles(user?.id || '');
   function handleOpenCarpoolDetails(carpoolId: string) {
     navigation.navigate('details', { carpoolId, fromScreen: 'upcoming' });
   }
 
   useEffect(() => {
     reloadCarpools();
+    console.log(data);
     setCarpools(data || []);
+    console.log(data);
     setImminentCarpool(data ? data[0] : null);
   }, [data]);
 
   if (isLoading) {
+    console.log(isLoading);
     return <Loading />;
   }
 

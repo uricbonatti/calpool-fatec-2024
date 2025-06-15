@@ -19,4 +19,5 @@ export type UserDTO = {
   phone: string;
   address: UserAddress;
   vehicles?: VehicleDTO[];
+  pixKey?: string;
 };

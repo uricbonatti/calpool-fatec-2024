@@ -16,8 +16,13 @@ export function Routes() {
   theme.colors.background = colors.gray['700'];
 
   if (isLoadingUserStorageData) {
+    console.log('Loading user data...');
     return <Loading />;
   }
+
+  if (!user || !user.id) {
+  return <AuthRoutes />;
+}
 
   return (
     <Box flex={1} bg="gray.700">

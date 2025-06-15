@@ -1,7 +1,9 @@
 import { NextCarpoolDTO } from '@dtos';
+import { useNavigation } from '@react-navigation/native';
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { calcRemainingTime } from '@utils/dateUtils';
 import { Box, HStack, Heading, Text, VStack } from 'native-base';
-import { Car } from 'phosphor-react-native';
+import { Car, ChatCircle } from 'phosphor-react-native';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
@@ -10,6 +12,7 @@ type Props = TouchableOpacityProps & {
 };
 
 export function ImminentRide({ data, ...rest }: Props) {
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
   const [arraivalOn, setArraivalOn] = useState<string | null>('');
 
   function formatArraivalOn(arraivalOn: Date) {
@@ -25,13 +28,16 @@ export function ImminentRide({ data, ...rest }: Props) {
         fontFamily="heading"
         fontWeight="bold"
       >
-        {arraivalOn}
+        {arraivalOn?.toString()}
       </Text>
     );
+    // console.log('arraivalOn', arraivalOn);
 
-    return arraivalOn
-      ? `Sua proxima Carona em ${arraiveString}`
-      : 'Sua carona deve estar a caminho.';
+    return arraivalOn ? (
+      <>Sua proxima carona em {arraiveString}</>
+    ) : (
+      'Sua carona deve estar a caminho.'
+    );
   }
 
   useEffect(() => {
@@ -67,7 +73,9 @@ export function ImminentRide({ data, ...rest }: Props) {
             {rideString()}
           </Heading>
           <Heading fontSize="sm" color="white" fontFamily="heading">
-            {`Veiculo ${data.licensePlate}`}
+            {data?.licensePlate
+              ? `Veículo ${data.licensePlate}`
+              : 'Veículo não informado'}
           </Heading>
           <Text
             color="green.500"
@@ -78,6 +86,12 @@ export function ImminentRide({ data, ...rest }: Props) {
             Mais detalhes
           </Text>
         </VStack>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('rideChat', { rideId: data.id })}
+          style={{ marginLeft: 'auto' }}
+        >
+          <ChatCircle color="#00B37E" size={28} />
+        </TouchableOpacity>
       </HStack>
     </TouchableOpacity>
   );

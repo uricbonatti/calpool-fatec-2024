@@ -3,7 +3,6 @@ import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { VehicleDTO } from '@dtos';
-import { updateVehicleMock } from '@mocks/api.mock';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { ScrollView, VStack } from 'native-base';
@@ -40,7 +39,7 @@ export function EditVehicle() {
   const handleSave = async (data: VehicleDTO) => {
     try {
       setIsLoading(true);
-      await updateVehicleMock(data);
+      //TODO - Adicionar chamada na classe
       navigation.goBack();
     } finally {
       setIsLoading(false);

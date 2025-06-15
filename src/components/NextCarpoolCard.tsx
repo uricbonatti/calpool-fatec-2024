@@ -1,5 +1,6 @@
 import { NextCarpoolDTO } from '@dtos';
 import { Entypo } from '@expo/vector-icons';
+import { format } from 'date-fns';
 import { HStack, Heading, Icon, Text, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
@@ -12,17 +13,17 @@ export function NextCarpoolCard({ data, ...rest }: Props) {
   const [arraivalOn, setArraivalOn] = useState<string>('');
 
   function formatArraivalOn(arraivalOn: Date) {
-    const day = arraivalOn.getDay();
-    const hours = arraivalOn.getHours();
-    const minutes = arraivalOn.getMinutes();
-    const month = arraivalOn.getMonth();
+    const day = format(arraivalOn, 'dd/MM');
+    const hour = format(arraivalOn, 'HH:mm');
 
-    return `Saída em ${day}/${month} às ${hours}:${minutes}`;
+    return `Saída em ${day} às ${hour}`;
   }
 
   useEffect(() => {
-    setArraivalOn(formatArraivalOn(data.arraivalOn));
-  }, [data.arraivalOn]);
+    if (data?.arraivalOn) {
+      setArraivalOn(formatArraivalOn(data.arraivalOn));
+    }
+  }, [data?.arraivalOn]);
 
   return (
     <TouchableOpacity {...rest}>

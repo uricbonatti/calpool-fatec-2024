@@ -2,7 +2,9 @@ import { ErrorScreen } from '@components/ErrorScreen';
 import { HistoryCard } from '@components/HistoryCard';
 import { ScreenHeader } from '@components/ScreenHeader';
 import { useAsyncMock } from '@hooks/useAsyncMock';
-import { fetchRideHistoryMock } from '@mocks/api.mock';
+import { rideHistory } from '@mocks/carpool.mock';
+import { useNavigation } from '@react-navigation/native';
+import { AppNavigatorRoutesProps } from '@routes/app.routes';
 import { groupRidesByDate } from '@utils/dateUtils';
 import {
   Center,
@@ -15,12 +17,17 @@ import {
 import { RefreshControl } from 'react-native';
 
 export function History() {
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
   const {
     data: rides,
     isLoading,
     error,
     retry,
-  } = useAsyncMock(fetchRideHistoryMock);
+  } = useAsyncMock(() => Promise.resolve(rideHistory));
+
+  const handleOpenDetails = (carpoolId: string) => {
+    navigation.navigate('historyDetails', { carpoolId });
+  };
 
   const handleRefresh = () => {
     retry();
@@ -51,10 +58,7 @@ export function History() {
         sections={groupedRides}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <HistoryCard
-            data={item}
-            onPress={() => console.log('Abrir detalhes', item.id)}
-          />
+          <HistoryCard data={item} onPress={() => handleOpenDetails(item.id)} />
         )}
         renderSectionHeader={({ section: { title } }) => (
           <Heading

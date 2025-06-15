@@ -1,11 +1,11 @@
+import { Button } from '@components/Button';
 import { ErrorScreen } from '@components/ErrorScreen';
 import { Loading } from '@components/Loading';
 import { ScreenHeader } from '@components/ScreenHeader';
-import { acceptRideRequestMock, fetchRideRequestsMock } from '@mocks/api.mock';
+import { mockRideRequests } from '@mocks/ride.mock';
 import {
   Avatar,
   Badge,
-  Button,
   Center,
   HStack,
   ScrollView,
@@ -34,7 +34,7 @@ export function RideRequests() {
   const loadRequests = async () => {
     try {
       setIsLoading(true);
-      const data = await fetchRideRequestsMock();
+      const data = mockRideRequests;
       setRequests(data);
     } catch (err) {
       setError(
@@ -47,7 +47,6 @@ export function RideRequests() {
 
   const handleAccept = async (requestId: string) => {
     try {
-      await acceptRideRequestMock(requestId);
       loadRequests(); // Recarrega a lista
     } catch (err) {
       setError('Erro ao aceitar solicitação');

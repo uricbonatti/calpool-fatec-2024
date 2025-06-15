@@ -13,7 +13,7 @@ import { AUTH_TOKEN_STORAGE, USER_STORAGE } from '@storage/storageConfig';
 import { THEME } from '@theme';
 import * as NavigationBar from 'expo-navigation-bar';
 import { NativeBaseProvider } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LogBox, StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -30,16 +30,23 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        // Inicializa os mocks no AsyncStorage
+        console.log('Inicializando mocks...');
         await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(mockUser));
         await AsyncStorage.setItem(
           AUTH_TOKEN_STORAGE,
           JSON.stringify(mockAuthTokens)
         );
 
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Verifique se os dados foram salvos
+        const user = await AsyncStorage.getItem(USER_STORAGE);
+        const token = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE);
+        console.log('Dados salvos:', { user, token });
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
         await NavigationBar.setVisibilityAsync('hidden');
       } catch (e) {
-        console.warn('Erro na inicialização:', e);
+        console.error('Erro na inicialização:', e);
       } finally {
         setAppIsReady(true);
       }
@@ -65,10 +72,10 @@ export default function App() {
           translucent
         />
         <AuthContextProvider>
-          {fontsLoaded ? (
+          {fontsLoaded && appIsReady ? (
             <Routes />
           ) : (
-            <Loading message="Carregando fontes..." />
+            <Loading message="Carregando fontes e dados de autenticação..." />
           )}
         </AuthContextProvider>
       </NativeBaseProvider>
